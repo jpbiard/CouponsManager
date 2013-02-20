@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Dernière sauvegarde-->
+<Coupons>
+  <Fabricant nom="Sheba" code="098">
+    <Coupon nom="Pedigree Snack" code="624" prix="050" quantite="6" />
+  </Fabricant>
+  <Fabricant nom="Whiskas" code="016" />
+  <Fabricant nom="Purina" code="033" />
+</Coupons>
