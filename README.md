@@ -1,0 +1,4 @@
+CouponsManager
+==============
+
+Management of Coupons
