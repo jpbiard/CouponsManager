@@ -3,7 +3,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-ref class MyPriceComboBoxItem {
+public ref class MyPriceComboBoxItem {
 
 public:
 	MyPriceComboBoxItem(const String^, const String^);

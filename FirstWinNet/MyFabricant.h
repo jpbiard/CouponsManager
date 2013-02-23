@@ -10,7 +10,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-ref class MyFabricant : public IEquatable<MyFabricant^>
+public ref class MyFabricant : public IEquatable<MyFabricant^>
 {
 public:
 	MyFabricant( String^, String^ );
@@ -20,7 +20,7 @@ public:
 	bool compareTo( MyCodeBar^ );
 	bool compareToCode( MyCodeBar^ );
 
-	virtual bool Equals( MyFabricant^ ) override;
+	virtual bool Equals( MyFabricant^ );
 
 	property String^ code {
 		String^ get() {

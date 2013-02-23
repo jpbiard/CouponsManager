@@ -6,6 +6,6 @@ ref class MyTomCoFabricant : public MyFabricant, IEquatable<MyTomCoFabricant^>
 public:
 	MyTomCoFabricant(void);
 
-	virtual bool Equals( MyTomCoFabricant^ ) override;
+	virtual bool Equals( MyTomCoFabricant^ );
 };
 

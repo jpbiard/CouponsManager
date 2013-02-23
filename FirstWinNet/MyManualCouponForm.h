@@ -12,7 +12,7 @@ namespace FirstWinNet {
 	/// <summary>
 	/// Summary for MyManualCouponForm
 	/// </summary>
-	public ref class MyManualCouponForm : public System::Windows::Forms::Form
+	public ref class MyManualCouponForm : public System::Windows::Forms::UserControl
 	{
 	public:
 		MyManualCouponForm(void)
@@ -88,7 +88,7 @@ namespace FirstWinNet {
 			this->table1->GridLinesContrainedToData = false;
 			this->table1->Location = System::Drawing::Point(21, 29);
 			this->table1->Name = L"table1";
-			this->table1->Size = System::Drawing::Size(667, 292);
+			this->table1->Size = System::Drawing::Size(560, 292);
 			this->table1->TabIndex = 0;
 			this->table1->TableModel = this->tableModel1;
 			this->table1->Text = L"table1";
@@ -97,21 +97,18 @@ namespace FirstWinNet {
 			// panel1
 			// 
 			this->panel1->Controls->Add(this->table1);
-			this->panel1->Location = System::Drawing::Point(12, 44);
+			this->panel1->Location = System::Drawing::Point(0, 1);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(716, 362);
+			this->panel1->Size = System::Drawing::Size(594, 435);
 			this->panel1->TabIndex = 1;
 			// 
 			// MyManualCouponForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(740, 450);
-			this->ControlBox = false;
+			this->ClientSize = System::Drawing::Size(594, 435);
 			this->Controls->Add(this->panel1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 			this->Name = L"MyManualCouponForm";
-			this->ShowIcon = false;
 			this->Text = L"MyManualCouponForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->table1))->EndInit();
 			this->panel1->ResumeLayout(false);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Form1.h"
+#include "MyForm.h"
 
 namespace FirstWinNet {
 	using namespace System;
@@ -159,7 +159,7 @@ namespace FirstWinNet {
 		case 1 :
 			{
 				this->Hide();
-				FirstWinNet::Form1^ lpForm = gcnew FirstWinNet::Form1();
+				FirstWinNet::MyForm^ lpForm = gcnew FirstWinNet::MyForm();
 				lpForm->actionId = selectedActionIndex;
 				lpForm->ShowDialog( this );
 				lpForm->Focus();

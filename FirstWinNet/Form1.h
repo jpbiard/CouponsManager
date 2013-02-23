@@ -2,15 +2,12 @@
 
 #pragma once
 
-#include "MyXmlParser.h"
 #include "MyCodeBar.h"
 #include "MyFabricant.h"
 #include "MyTomCoFabricant.h"
 #include "MyCoupon.h"
 #include "MyNewFabricantDialog.h"
 #include "AddNewBarCodeDialog.h"
-#include "SelectEmptyFileDialog.h"
-#include "MyManualCouponForm.h"
 #include "PriceDialog.h"
 #include "CouponDialog.h"
 #include "MyXmlWriter.h"
@@ -35,16 +32,15 @@ namespace FirstWinNet {
 	/// <summary>
 	/// Summary for Form1
 	/// </summary>
-	public ref class Form1 : public System::Windows::Forms::Form
+	public ref class Form1 : public System::Windows::Forms::UserControl
 	{
 	public:
-		Form1(void)
+		Form1(List<MyFabricant^>^ lpFabricantsList, CultureInfo^ lpcurrentCulture)
+			: m_lpFabricantsList( lpFabricantsList ), m_lpcurrentCulture( lpcurrentCulture )
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
-			// InitializeApplication();
-			m_actionId = -1;
 		}
 
 	protected:
@@ -69,34 +65,11 @@ namespace FirstWinNet {
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Label^  label5;
 	private: System::ComponentModel::IContainer^  components;
-
-
-
-
-
-
 	private: System::Windows::Forms::GroupBox^  groupBox1;
 	private: System::Windows::Forms::TextBox^  grandTotalTextBox;
 	private: System::Windows::Forms::Label^  label7;
-	private: System::Windows::Forms::ToolStrip^  toolStrip1;
-	private: System::Windows::Forms::ToolStripButton^  saveToolStripButton;
-	private: System::Windows::Forms::ToolStripButton^  printToolStripButton;
 	private: System::Windows::Forms::TextBox^  couponsTotalBox;
 	private: System::Windows::Forms::Label^  label6;
-	private: System::Windows::Forms::StatusStrip^  statusStrip1;
-	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatusLabel1;
-	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatusLabel2;
-	private: System::Windows::Forms::ToolStripButton^  manualCouponStripButton;
-
-
-	private:
-		/// <summary>
-		/// Required designer variable.
-		List<MyFabricant^>^ m_fabricantsList;
-		String^ m_outputFileName;
-		Boolean^ m_changesDone;
-		String^ m_lastSaveDate;
-		CultureInfo^ m_lpcurrentCulture;
 	private: System::Windows::Forms::ListView^  couponsListView;
 	private: System::Windows::Forms::ColumnHeader^  product;
 	private: System::Windows::Forms::ColumnHeader^  amount;
@@ -105,9 +78,14 @@ namespace FirstWinNet {
 	private: System::Windows::Forms::ColumnHeader^  code;
 	private: System::Windows::Forms::TextBox^  codeBarTextBox;
 	private: System::Windows::Forms::Panel^  panel1;
-	private: System::Windows::Forms::ToolStripButton^  autoCouponStripButton;
 
-			 int m_actionId;
+	private:
+		/// <summary>
+		/// Required designer variable.
+		List<MyFabricant^>^ const m_lpFabricantsList;
+		CultureInfo^ const m_lpcurrentCulture;
+		String^ m_lastSaveDate;
+		Boolean^ m_couponsChangesDone;
 		/// </summary>
 
 #pragma region Windows Form Designer generated code
@@ -117,7 +95,6 @@ namespace FirstWinNet {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->addedTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
@@ -129,15 +106,8 @@ namespace FirstWinNet {
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
 			this->grandTotalTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->toolStrip1 = (gcnew System::Windows::Forms::ToolStrip());
-			this->saveToolStripButton = (gcnew System::Windows::Forms::ToolStripButton());
-			this->printToolStripButton = (gcnew System::Windows::Forms::ToolStripButton());
-			this->manualCouponStripButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->couponsTotalBox = (gcnew System::Windows::Forms::TextBox());
 			this->label6 = (gcnew System::Windows::Forms::Label());
-			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
-			this->toolStripStatusLabel1 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
-			this->toolStripStatusLabel2 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->couponsListView = (gcnew System::Windows::Forms::ListView());
 			this->product = (gcnew System::Windows::Forms::ColumnHeader());
 			this->amount = (gcnew System::Windows::Forms::ColumnHeader());
@@ -146,9 +116,6 @@ namespace FirstWinNet {
 			this->code = (gcnew System::Windows::Forms::ColumnHeader());
 			this->codeBarTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
-			this->autoCouponStripButton = (gcnew System::Windows::Forms::ToolStripButton());
-			this->toolStrip1->SuspendLayout();
-			this->statusStrip1->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -252,46 +219,6 @@ namespace FirstWinNet {
 			this->label7->TabIndex = 17;
 			this->label7->Text = L"Grand Total:";
 			// 
-			// toolStrip1
-			// 
-			this->toolStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->saveToolStripButton, 
-				this->printToolStripButton, this->autoCouponStripButton, this->manualCouponStripButton});
-			this->toolStrip1->Location = System::Drawing::Point(0, 0);
-			this->toolStrip1->Name = L"toolStrip1";
-			this->toolStrip1->Size = System::Drawing::Size(594, 25);
-			this->toolStrip1->TabIndex = 18;
-			this->toolStrip1->Text = L"toolStrip1";
-			// 
-			// saveToolStripButton
-			// 
-			this->saveToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-			this->saveToolStripButton->Enabled = false;
-			this->saveToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"saveToolStripButton.Image")));
-			this->saveToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->saveToolStripButton->Name = L"saveToolStripButton";
-			this->saveToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->saveToolStripButton->Text = L"&Save";
-			this->saveToolStripButton->Click += gcnew System::EventHandler(this, &Form1::saveToolStripMenuItem_Click);
-			// 
-			// printToolStripButton
-			// 
-			this->printToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-			this->printToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"printToolStripButton.Image")));
-			this->printToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->printToolStripButton->Name = L"printToolStripButton";
-			this->printToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->printToolStripButton->Text = L"&Print";
-			// 
-			// manualCouponStripButton
-			// 
-			this->manualCouponStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
-			this->manualCouponStripButton->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"manualCouponStripButton.Image")));
-			this->manualCouponStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->manualCouponStripButton->Name = L"manualCouponStripButton";
-			this->manualCouponStripButton->Size = System::Drawing::Size(126, 22);
-			this->manualCouponStripButton->Text = L"Coupon sans Barcode";
-			this->manualCouponStripButton->Click += gcnew System::EventHandler(this, &Form1::manualCouponStripButton_Click);
-			// 
 			// couponsTotalBox
 			// 
 			this->couponsTotalBox->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(255)), 
@@ -314,43 +241,12 @@ namespace FirstWinNet {
 			this->label6->TabIndex = 20;
 			this->label6->Text = L"Nbr coupons enregistrés:";
 			// 
-			// statusStrip1
-			// 
-			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->toolStripStatusLabel1, 
-				this->toolStripStatusLabel2});
-			this->statusStrip1->Location = System::Drawing::Point(0, 460);
-			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(594, 22);
-			this->statusStrip1->SizingGrip = false;
-			this->statusStrip1->TabIndex = 21;
-			this->statusStrip1->Text = L"statusStrip1";
-			// 
-			// toolStripStatusLabel1
-			// 
-			this->toolStripStatusLabel1->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
-			this->toolStripStatusLabel1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, 
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->toolStripStatusLabel1->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->toolStripStatusLabel1->Name = L"toolStripStatusLabel1";
-			this->toolStripStatusLabel1->Size = System::Drawing::Size(461, 17);
-			this->toolStripStatusLabel1->Spring = true;
-			this->toolStripStatusLabel1->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			// 
-			// toolStripStatusLabel2
-			// 
-			this->toolStripStatusLabel2->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
-			this->toolStripStatusLabel2->ImageAlign = System::Drawing::ContentAlignment::MiddleRight;
-			this->toolStripStatusLabel2->Name = L"toolStripStatusLabel2";
-			this->toolStripStatusLabel2->Size = System::Drawing::Size(118, 17);
-			this->toolStripStatusLabel2->Text = L"toolStripStatusLabel2";
-			this->toolStripStatusLabel2->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
-			// 
 			// couponsListView
 			// 
 			this->couponsListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(5) {this->product, this->amount, 
 				this->quantity, this->total, this->code});
 			this->couponsListView->GridLines = true;
-			this->couponsListView->Location = System::Drawing::Point(1, 4);
+			this->couponsListView->Location = System::Drawing::Point(1, 0);
 			this->couponsListView->Name = L"couponsListView";
 			this->couponsListView->Size = System::Drawing::Size(594, 213);
 			this->couponsListView->TabIndex = 12;
@@ -405,76 +301,36 @@ namespace FirstWinNet {
 			this->panel1->Controls->Add(this->addedArticleTextBox);
 			this->panel1->Controls->Add(this->addedAmountTextBox);
 			this->panel1->Controls->Add(this->groupBox1);
-			this->panel1->Location = System::Drawing::Point(-1, 24);
+			this->panel1->Location = System::Drawing::Point(-1, 1);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(595, 433);
 			this->panel1->TabIndex = 22;
-			// 
-			// autoCouponStripButton
-			// 
-			this->autoCouponStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
-			this->autoCouponStripButton->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"autoCouponStripButton.Image")));
-			this->autoCouponStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->autoCouponStripButton->Name = L"autoCouponStripButton";
-			this->autoCouponStripButton->Size = System::Drawing::Size(139, 22);
-			this->autoCouponStripButton->Text = L"Coupon avec CodeBarre";
-			this->autoCouponStripButton->Click += gcnew System::EventHandler(this, &Form1::autoCouponStripButton_Click);
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(594, 482);
-			this->Controls->Add(this->statusStrip1);
-			this->Controls->Add(this->toolStrip1);
 			this->Controls->Add(this->panel1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
-			this->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"$this.Icon")));
-			this->MaximizeBox = false;
 			this->Name = L"Form1";
-			this->Text = L"Gestionnaire de coupons";
-			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Form1::Form1_FormClosing);
-			this->Load += gcnew System::EventHandler(this, &Form1::form_load);
-			this->toolStrip1->ResumeLayout(false);
-			this->toolStrip1->PerformLayout();
-			this->statusStrip1->ResumeLayout(false);
-			this->statusStrip1->PerformLayout();
+			this->Size = System::Drawing::Size(594, 435);
+			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
-			this->PerformLayout();
 
 		}
 #pragma endregion
 
 	private: void InitializeApplication(void) {
 
-		if (this->m_fabricantsList != nullptr) {
-			this->m_fabricantsList->Clear();
-			delete this->m_fabricantsList;
-		}
-		this->m_fabricantsList = gcnew List<MyFabricant^>(50);
-		this->m_outputFileName = nullptr;
-		this->m_changesDone = false;
+		this->m_couponsChangesDone = false;
 		this->grandTotalTextBox->Clear();
 		this->couponsTotalBox->Clear();
 		this->couponsListView->Items->Clear();
 		this->couponsListView->Groups->Clear();
 		this->codeBarTextBox->Clear();
 		this->moveCursorToEnd();
-		this->toolStripStatusLabel1->Text = "";
-		this->toolStripStatusLabel2->Text = "";
-		this->saveToolStripButton->Enabled = false;
-		// use french number display
-		m_lpcurrentCulture = gcnew CultureInfo("fr-FR");
 	}
-
-	public:
-		property int actionId {
-			void set( int value ) {
-				m_actionId = value;
-			}
-		}
 
 	/*
 	 * Event handler: when a new key is entered in the BarCodeTextBox
@@ -527,7 +383,7 @@ namespace FirstWinNet {
 						AddNewBarCodeDialog^ lpAddNewBarCodeDialog = gcnew AddNewBarCodeDialog();
 						lpAddNewBarCodeDialog->codeFabricant = const_cast<String^>( lpNewCodeBar->codeFabricant );
 						lpAddNewBarCodeDialog->codeCoupon = const_cast<String^>( lpNewCodeBar->codeCoupon );
-						lpAddNewBarCodeDialog->montantCoupon = lpNewCodeBar->montantDecimalCoupon->ToString( m_lpcurrentCulture );
+						lpAddNewBarCodeDialog->montantCoupon = lpNewCodeBar->montantDecimalCoupon->ToString( const_cast<CultureInfo^>( m_lpcurrentCulture ) );
 						lpAddNewBarCodeDialog->ShowDialog( this );
 
 						if ( lpAddNewBarCodeDialog->DialogResult == System::Windows::Forms::DialogResult::OK ) {
@@ -581,7 +437,7 @@ namespace FirstWinNet {
 	private: List<MyPriceComboBoxItem^>^ populatePriceComboBox(MyCodeBar^ lpCodeBar) {
 		List<MyPriceComboBoxItem^>^ lstItems = gcnew List<MyPriceComboBoxItem^>(10);
 
-		for each ( MyFabricant^ s in this->m_fabricantsList ) {
+		for each ( MyFabricant^ s in this->m_lpFabricantsList ) {
 			if ( s->compareToCode( lpCodeBar ) ) {
 				// same fabricant !!!
 				List<MyCoupon^>^ lpCouponsList = s->couponsList;
@@ -649,7 +505,7 @@ namespace FirstWinNet {
 		Decimal aCouponTotal = 0;
 		int aCouponsQty = 0;
 
-		for each ( MyFabricant^ s in this->m_fabricantsList ) {
+		for each ( MyFabricant^ s in this->m_lpFabricantsList ) {
 			Diagnostics::Debug::WriteLine( "Fabricant: " + s->nom );
 			ListViewGroup^ lpListViewGroup = gcnew ListViewGroup( s->code, s->nom + " (code: " + s->code + ")" );
 			this->couponsListView->Groups->Add( lpListViewGroup );
@@ -690,14 +546,14 @@ namespace FirstWinNet {
 	 */
 	private: System::Void updateUnknownFabricants( ) {
 
-		int* lpArrayFabricants = new int[m_fabricantsList->Count];
+		int* lpArrayFabricants = new int[m_lpFabricantsList->Count];
 		int aIdx = 0;
 		bool isFound;
 
-		for each ( MyFabricant^ s in this->m_fabricantsList ) {
+		for each ( MyFabricant^ s in this->m_lpFabricantsList ) {
 			if ( s->isUnknown ) {
 				isFound = false;
-				for each ( MyFabricant^ t in this->m_fabricantsList ) {
+				for each ( MyFabricant^ t in this->m_lpFabricantsList ) {
 					if ( ( ! t->isUnknown ) && ( t->code->CompareTo( s->code ) == 0 ) ) {
 						// migrer tous les coupons vers ce fabriquant connu
 						for each ( MyCoupon^ c in s->couponsList ) {
@@ -716,12 +572,12 @@ namespace FirstWinNet {
 					}
 				}
 				if ( isFound )
-					lpArrayFabricants[aIdx++] = m_fabricantsList->IndexOf( s );
+					lpArrayFabricants[aIdx++] = m_lpFabricantsList->IndexOf( s );
 			}
 		}
 
 		for ( int i = 0; i < aIdx; i++ ) {
-			m_fabricantsList->RemoveAt( lpArrayFabricants[i] );
+			m_lpFabricantsList->RemoveAt( lpArrayFabricants[i] );
 		}
 		delete [] lpArrayFabricants;
 	}
@@ -732,11 +588,10 @@ namespace FirstWinNet {
 	private: System::Void updateFabricantsList( MyCodeBar^ lpNewCodeBar, String^ lpQuantite ) {
 
 		String^ nomCoupon;
-		this->m_changesDone = true;
-		this->saveToolStripButton->Enabled = true;
+		this->m_couponsChangesDone = true;
 
 		// vérifier si le fabricant est déja enregistre
-		for each ( MyFabricant^ s in this->m_fabricantsList ) {
+		for each ( MyFabricant^ s in this->m_lpFabricantsList ) {
 			if ( s->compareTo( lpNewCodeBar ) ) {
 				// le fabricant existe deja, verifier le coupon
 				nomCoupon = nullptr;
@@ -807,7 +662,7 @@ namespace FirstWinNet {
 					lpNewFabricant->addOneCoupon( COUPON_INCONNU, lpNewCodeBar->codeCoupon, lpNewCodeBar->montantCoupon, lpQuantite, lpNewCodeBar->codeBarTag );
 			}
 
-			this->m_fabricantsList->Add( lpNewFabricant );
+			this->m_lpFabricantsList->Add( lpNewFabricant );
 		}
 	}
 
@@ -823,143 +678,14 @@ namespace FirstWinNet {
 	//	this->InitializeApplication();
 	//}
 
-	private: void saveChanges() {
-
-		FileStream^ lpFileStream = nullptr;
-		MyXmlWriter^ lpMyXmlWriter = nullptr;
-
-		if (this->m_outputFileName != nullptr) {
-			lpFileStream = gcnew FileStream(this->m_outputFileName, FileMode::Open);
-			lpMyXmlWriter = gcnew MyXmlWriter();
-			lpMyXmlWriter->SaveFabricantsList(this->m_fabricantsList, lpFileStream);
-			lpFileStream->Close();
-			this->m_changesDone = false;
-		}
-	}
-	
-	private: void checkChangesSaved() {
-
-		if ( this->m_changesDone->Equals(true) ) {
-			if ( MessageBox::Show( "Voulez-vous sauvegarder vos changements avant de continuer ?",
-				"Gestionnaire de coupons", MessageBoxButtons::YesNo,
-				MessageBoxIcon::Warning ) == System::Windows::Forms::DialogResult::Yes ) {
-				this->saveChanges();
-			}
-			this->m_changesDone = false;
-		}
-	}
-
-	/*
-	 * Called when the form is loaded
-	 */
-	private: System::Void form_load(System::Object^  sender, System::EventArgs^  e) {
-
-		this->InitializeApplication();
-
-		switch (m_actionId) {
-		case 0 :
-			/*
-			 * start from an empty file
-			 */
-			{
-				// ask for a file name
-				SelectEmptyFileDialog^ lpSelectEmptyFileDialog = gcnew SelectEmptyFileDialog();
-				if ( lpSelectEmptyFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK ) {
-					this->m_outputFileName = lpSelectEmptyFileDialog->getSelectedFileName();
-					lpSelectEmptyFileDialog->Close();
-					this->toolStripStatusLabel1->Text = "Fichier: " + this->m_outputFileName;
-					this->loadXmlFile();
-					this->toolStripStatusLabel2->Text = "Sauvegarde: " + this->m_lastSaveDate;
-					// create the Tom&Co fabricant if not yet done
-					MyTomCoFabricant^ lpTomFabricantTemp = gcnew MyTomCoFabricant ();
-					if ( ! m_fabricantsList->Contains( lpTomFabricantTemp ) )
-						m_fabricantsList->Add( lpTomFabricantTemp );
-				}
-				delete lpSelectEmptyFileDialog;
-				//show the List
-				this->showListView();
-			}
-			break;
-		case 1 :
-			/*
-			 * start from an existing file
-			 */
-			{
-				OpenFileDialog^ lpOpenFileDialog = gcnew OpenFileDialog;
-				lpOpenFileDialog->Title = "Ouvrir un fichier de coupons";
-				lpOpenFileDialog->Filter = "Fichier xml (*.xml)|*.xml";
-
-				String^ lpXmlFileName;
-
-				if (lpOpenFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-					if ( (lpXmlFileName = lpOpenFileDialog->FileName) != nullptr ) {
-						this->m_outputFileName = lpXmlFileName;
-						this->toolStripStatusLabel1->Text = "Fichier: " + this->m_outputFileName;
-						this->loadXmlFile();
-						this->toolStripStatusLabel2->Text = "Sauvegarde: " + this->m_lastSaveDate;
-						// create the Tom&Co fabricant if not yet done
-						MyTomCoFabricant^ lpTomFabricantTemp = gcnew MyTomCoFabricant ();
-						if ( ! m_fabricantsList->Contains( lpTomFabricantTemp ) )
-							m_fabricantsList->Add( lpTomFabricantTemp );
-					}
-				}
-				delete lpOpenFileDialog;
-				//show the List
-				this->showListView();
-			}
-			break;
-		default :
-			this->Close();
-		}
-
-		//this->panel1->Hide();
-	}
-
-	private: void loadXmlFile() {
-
-		MyXmlParser^ myXmlParser;
-
-		try {
-			myXmlParser = gcnew MyXmlParser( this->m_outputFileName );
-			myXmlParser->ParseFabricant( this->m_fabricantsList );
-			this->m_lastSaveDate = myXmlParser->getLastSaveDate();
-			delete myXmlParser;
-		} catch (XmlException^ lpEx) {
-			MessageBox::Show( lpEx->Message,
-						"Gestionnaire de coupons", MessageBoxButtons::OK,
-						MessageBoxIcon::Error );
-			//Diagnostics::Debug::WriteLine( "ERROR: " + e );
-		}
-	}
-
 /* ------------------------------------
  * Events functions
  * ------------------------------------ */
-	private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-		this->saveChanges();
-		this->saveToolStripButton->Enabled = false;
-	}
-
-
-	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-		this->checkChangesSaved();
-		this->Close();
-	}
-
-	private: System::Void Form1_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
-		this->checkChangesSaved();
-	}
-
-	private: System::Void manualCouponStripButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		MyManualCouponForm^ lpManualCouponForm = gcnew MyManualCouponForm();
-		lpManualCouponForm->TopLevel = false;
-		this->panel1->Controls->Clear();
-		this->panel1->Controls->Add( lpManualCouponForm );
-		lpManualCouponForm->Show();
-	}
-
-	private: System::Void autoCouponStripButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		this->panel1->Show();
+	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
+		//show the List
+		this->showListView();
+		//set the focus on the CodeBar Text box
+		this->codeBarTextBox->Focus();
 	}
 };
 }

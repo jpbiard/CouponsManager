@@ -2,7 +2,7 @@
 
 using namespace System;
 
-ref class MyCoupon
+public ref class MyCoupon
 {
 public:
 	MyCoupon( String^, String^, String^, String^, String^ );

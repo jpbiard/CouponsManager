@@ -3,7 +3,7 @@
 using namespace System;
 using namespace System::Text;
 
-ref class MyCodeBar
+public ref class MyCodeBar
 {
 public:
 	MyCodeBar( String^ );
